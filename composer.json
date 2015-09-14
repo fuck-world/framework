@@ -1,0 +1,16 @@
+{
+    "name": "sevensoft/framework",
+    "description": "The skphp Framework.",
+    "homepage": "http://skphp.sk-school.com",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "seven",
+            "email": "200641838@qq.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=5.3.0"
+    }
+}
