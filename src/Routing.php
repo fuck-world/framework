@@ -131,7 +131,7 @@ class Routing
                 {
                 	self::execute($pos,$uri,''); 
 				} else {
-					call_user_func(self::$callbacks[$pos]);                        
+					call_user_func(self::$callbacks[$pos]);die;
 				}
 			}			
         } else {         	
@@ -148,7 +148,7 @@ class Routing
                         {
                         	self::execute($pos,$uri,$matched);    
                         } else {
-                            call_user_func_array(self::$callbacks[$pos], $matched);
+                            call_user_func_array(self::$callbacks[$pos], $matched);die;
                         }
                     }
                 }

@@ -15,9 +15,6 @@
         "illuminate/database": "*"
     },
     "autoload": {
-        "psr-4": { 
-	    "Skschool\\": "src/",
-            "App\\": "app/"
-	}
+        "psr-4": { "Skschool\\": "src/" }
     }   
 }

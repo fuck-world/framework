@@ -35,7 +35,7 @@ class Config
      * @param  string  $key
      * @return mixed
      */
-    public function get($key)
+    static public function get($key)
     {
         return empty(self::$_config[$key])?'':self::$_config[$key];
     }
@@ -47,11 +47,11 @@ class Config
      * @param  mixed   $value
      * @return void
      */
-    public function set($key, $value = null)
+    static public function set($key, $value = null)
     {
     
     	$file = APP_ROOT . 'config/config.php';
-    	$config = array_merge(include $file, array_change_key_case(array($key=>$value), CASE_UPPER));
+    	$config = array_merge(include $file, array_change_key_case(array($key=>$value), CASE_LOWER));
     	$str = "<?php\r\nreturn " . str_replace('array (', '[', substr(var_export($config, true), 0, strlen(var_export($config, true))-1)) . "];\r\n?>";
     	if (file_put_contents($file, $str)) {
 			return true;

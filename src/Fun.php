@@ -21,6 +21,7 @@ use Skschool\Jsmin;
 use Skschool\Cssmin;
 use Skschool\Cache;
 use Skschool\Config;
+use Skschool\View;
 
 //SKPHP 系统函数库
 
@@ -34,6 +35,19 @@ function p($data) {
 	echo '<pre>';
 	print_r($data);
 	echo '<pre>';
+}
+
+
+/**
+ * URL
+ * @param  string	$url
+ * @return
+ */
+function URL($param) {
+	$PHP_SELF = $_SERVER['PHP_SELF'] ? $_SERVER['PHP_SELF'] : $_SERVER['SCRIPT_NAME'];
+	$url = 'http://'.$_SERVER['HTTP_HOST'].substr($PHP_SELF,0,strrpos($PHP_SELF, '/')+1);
+	$url = substr($url, '-1') == '/' ? substr($url, 0, strlen($url)-1): $url;
+	return $url.$param;
 }
 
 
@@ -58,7 +72,6 @@ function C($name='', $value='') {
 		trigger_error('IS NOT SETTING NAME');
 	}
 }
-
 
 
 /**
@@ -103,12 +116,12 @@ function DB($connection='')
 	}
 
 	// 默认
-	$db_host = Config::$_config['db_host'];
-	$db_port = Config::$_config['db_port'];
-	$db_user = Config::$_config['db_user'];
-	$db_pwd = Config::$_config['db_pwd'];
-	$db_database = Config::$_config['db_database'];
-	$db_charset = Config::$_config['db_charset'];
+	$db_host = Config::$_config['host'];
+	$db_user = Config::$_config['username'];
+	$db_pwd = Config::$_config['password'];
+	$db_database = Config::$_config['database'];
+	$db_charset = Config::$_config['charset'];
+	$db_port = '3306';
 	if($db_host != '' && $db_user != '' &&  $db_database != '' && $db_charset != '')
 	{
 		$mysql->init($db_host, $db_port, $db_user, $db_pwd, $db_database, $db_charset);
@@ -133,10 +146,10 @@ function minJs($src='',$md5_name='') {
 		$arr_src = explode('|', $src);
 		foreach ($arr_src as $v)
 		{
-			$src_content_size += abs(filesize(APP_ROOT.$v));
+			$src_content_size += date("YmdHis", filemtime(APP_ROOT.$v));
 		}
-	}else {
-		$src_content_size = abs(filesize(APP_ROOT.$src));
+	}else {		
+		$src_content_size = date("YmdHis", filemtime(APP_ROOT.$src));
 	}
 	
 	$cache_src = STYLE_CACHE_PATH . md5($src.$md5_name.$src_content_size) . '.js';
@@ -174,11 +187,11 @@ function minCss($src='',$md5_name='') {
 		$src_content_size = 0;
 		$arr_src = explode('|', $src);
 		foreach ($arr_src as $v)
-		{
-			$src_content_size += abs(filesize(APP_ROOT.$v));
+		{						
+			$src_content_size += date("YmdHis", filemtime(APP_ROOT.$v));
 		}
 	}else {
-		$src_content_size = abs(filesize(APP_ROOT.$src));
+		$src_content_size = date("YmdHis", filemtime(APP_ROOT.$src));
 	}
 	
 	$cache_src = STYLE_CACHE_PATH . md5($src.$md5_name.$src_content_size) . '.css';
@@ -201,4 +214,16 @@ function minCss($src='',$md5_name='') {
 	}
 	return $cache_src;
 }
-   
+
+/**
+ * 调用视图
+ * @param	string	$file
+ * @return
+ */
+function view($templateFile='',$charset='') {
+	define('MODULE_NAME', '');
+	define('CONTROLLER_NAME', '');
+	define('ACTION_NAME', '');
+	$View = new \Skschool\View();
+	return $View->display($templateFile);
+}

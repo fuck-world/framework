@@ -20,7 +20,7 @@
 
 class Mysql {
 
-	private static $_instance;		//该属性用来保存实例
+	private static $_instance;			   //该属性用来保存实例
 
 	public static $dbtype = 'mysql';
 	public static $dbhost = '';
@@ -30,7 +30,7 @@ class Mysql {
 	public static $dbpass = '';
 	public static $charset = '';
 	public static $stmt = null;
-	public static $DB = null;			//  当前数据库连接实例
+	public static $DB = null;				//  当前数据库连接实例
 	public static $connect = false; 		//  是否长连接
 	public static $debug = APP_DEBUG;
 	private static $parms = array ();
@@ -128,7 +128,7 @@ class Mysql {
 
 	/**
 	 * 作用:执行INSERT\UPDATE\DELETE
-	 * 返回:执行語句影响行数
+	 * 返回:执行语句影响行数
 	 * 类型:数字
 	 */
 	public function execute($sql, $table='') {
@@ -145,9 +145,10 @@ class Mysql {
 		return $status;
 	}
 
+	
 	/**
 	 * 获取要操作的数据
-	 * 返回:合併后的SQL語句
+	 * 返回:合并后的SQL语句
 	 * 类型:字串
 	 */
 	private function getCode($table, $args) {
@@ -163,13 +164,17 @@ class Mysql {
 		$code = substr ( $code, 0, - 1 );
 		return $code;
 	}
+	
+	
 	public function optimizeTable($table) {
 		$sql = "OPTIMIZE TABLE $table";
 		self::execute ($sql, $table);
 	}
+	
+	
 	/**
 	 * 执行具体SQL操作
-	 * 返回:运行結果
+	 * 返回:运行结果
 	 * 类型:数组
 	 */
 	public function query($sql, $type='1') {
@@ -191,11 +196,13 @@ class Mysql {
 		self::$stmt = null;
 		return $result;
 	}
+	
+	
 	/**
 	 * 作用:插入数据
-	 * 返回:表內记录
+	 * 返回:表内记录
 	 * 类型:数组
-	 * 參数:$db->insert('$table',array('name'=>'test'))
+	 * 参数:$db->insert('$table',array('name'=>'test'))
 	 */
 	public function insert($table, $args)
 	{
@@ -214,9 +221,9 @@ class Mysql {
 
 	/**
 	 * 作用: 读取字段值
-	 * 返回: 表內记录
+	 * 返回: 表内记录
 	 * 类型: 数组
-	 * 參数: $db->getField($table,$fields,$where)
+	 * 参数: $db->getField($table,$fields,$where)
 	 */
 	public function getField($table,$fields,$where)
 	{
@@ -237,7 +244,7 @@ class Mysql {
 	 * 修改数据
 	 * 返回:记录数
 	 * 类型:数字
-	 * 參数:$db->update($table,$data,$where);
+	 * 参数:$db->update($table,$data,$where);
 	 */
 	public function update($table='', $args='', $where='') {
 		if(empty($table) || empty($args)) self::sqlError ( 'CURD syntax error' );
@@ -251,9 +258,9 @@ class Mysql {
 
 	/**
 	 * 作用:刪除数据
-	 * 返回:表內记录
+	 * 返回:表内记录
 	 * 类型:数组
-	 * 參数:$db->delete($table,$where)
+	 * 参数:$db->delete($table,$where)
 	 */
 	public function delete($table='', $where='') {
 		if(empty($table)) self::sqlError ( 'CURD syntax error' );
@@ -264,9 +271,9 @@ class Mysql {
 
 	/**
 	 * 作用:获取单行数据
-	 * 返回:表內第一条记录
+	 * 返回:表内第一条记录
 	 * 类型:数组
-	 * 參数: $db->fetOne($table,$field,$where)
+	 * 参数: $db->fetOne($table,$field,$where)
 	 */
 	public function fetOne($table, $field = '*', $where = false) {
 		$sql = "SELECT {$field} FROM `{$table}`";
@@ -277,9 +284,9 @@ class Mysql {
 
 	/**
 	 * 作用:获取所有数据
-	 * 返回:表內记录
-	 * 类型:二維数组
-	 * 參数:$db->fetAll($table,$field = '*',$orderby = '',$where='')
+	 * 返回:表内记录
+	 * 类型:二维数组
+	 * 参数:$db->fetAll($table,$field = '*',$orderby = '',$where='')
 	 */
 	public function fetAll($table, $field = '*', $orderby = false, $where = false) {
 		$sql = "SELECT {$field} FROM `{$table}`";
@@ -291,9 +298,9 @@ class Mysql {
 
 	/**
 	 * 作用:获取单行数据
-	 * 返回:表內第一条记录
+	 * 返回:表内第一条记录
 	 * 类型:数组
-	 * 參数:select * from table where id='1'
+	 * 参数:select * from table where id='1'
 	 */
 	public function getOne($sql) {
 		return self::query ( $sql, $type = '0' );
@@ -302,9 +309,9 @@ class Mysql {
 
 	/**
 	 * 作用:获取所有数据
-	 * 返回:表內记录
-	 * 类型:二維数组
-	 * 參数:select * from table
+	 * 返回:表内记录
+	 * 类型:二维数组
+	 * 参数:select * from table
 	 */
 	public function getAll($sql) {
 		return self::query ( $sql, $type = '1' );
@@ -313,9 +320,9 @@ class Mysql {
 
 	/**
 	 * 作用:获取首行首列数据
-	 * 返回:首行首列欄位值
+	 * 返回:首行首列栏位值
 	 * 类型:值
-	 * 參数:select `a` from table where id='1'
+	 * 参数:select `a` from table where id='1'
 	 */
 	public function scalar($sql, $fieldname) {
 		$row = self::query ( $sql, $type = '0' );
@@ -327,7 +334,7 @@ class Mysql {
 	 * 获取记录总数
 	 * 返回:记录数
 	 * 类型:数字
-	 * 參数:$db->fetRow($table,$field,$where);
+	 * 参数:$db->fetRow($table,$field,$where);
 	 */
 	public function fetRowCount($table, $field = '*', $where = false) {
 		$sql = "SELECT COUNT({$field}) AS num FROM $table";
@@ -339,7 +346,7 @@ class Mysql {
 	 * 获取记录总数
 	 * 返回:记录数
 	 * 类型:数字
-	 * 參数:select count(*) from table
+	 * 参数:select count(*) from table
 	 */
 	public function getRowCount($sql) {
 		return self::query ( $sql, $type = '2' );
@@ -351,6 +358,7 @@ class Mysql {
 		return ($mode == true) ? self::$debug = true : self::$debug = false;
 	}
 
+	
 	/**
 	 * 捕获PDO错误信息
 	 * 返回:出错信息
@@ -410,7 +418,7 @@ class Mysql {
 
 	/**
 	 * 作用:运行错误信息
-	 * 返回:运行错误信息和SQL語句
+	 * 返回:运行错误信息和SQL语句
 	 * 类型:字符
 	 */
 	private function sqlError($message = '', $info = '', $sql = '')

@@ -76,8 +76,8 @@ class View {
 		$view_file = VIEW_PATH . $templateFile . '.php';
 		if (file_exists($view_file)) 
        	{
-       		$filesize=abs(filesize($view_file));
-       		$view_file_cache = VIEW_CACHE_PATH . md5(MODULE_NAME.CONTROLLER_NAME.ACTION_NAME.$filesize) . '.php';
+       		$filetime = date("YmdHis", filemtime($view_file));
+       		$view_file_cache = VIEW_CACHE_PATH . md5(MODULE_NAME.CONTROLLER_NAME.ACTION_NAME.$filetime) . '.php';
 			if (!file_exists($view_file_cache)) $this->writeTplCache($view_file_cache,file_get_contents($view_file));
 			extract($this->data);
 			ob_start();
@@ -106,7 +106,7 @@ class View {
 		header('Content-Type:'.$contentType.'; charset='.$charset); // 网页字符编码
 		header('Cache-control: private');  							// 页面缓存控制
 		header('X-Powered-By:SKPHP');
-		echo $content;	// 输出模板文件
+		echo $content;die;	// 输出模板文件
 	} 
 	
 	

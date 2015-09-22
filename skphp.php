@@ -1,5 +1,22 @@
 <?php
-
+/**
+ // +-------------------------------------------------------------------
+ // | SKPHP [ 为web梦想家创造的PHP框架。 ]
+ // +-------------------------------------------------------------------
+ // | Copyright (c) 2012-2016 http://sk-school.com All rights reserved.
+ // +-------------------------------------------------------------------
+ // | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
+ // +-------------------------------------------------------------------
+ // | Author:
+ // | seven <seven@sk-school.com>
+ // | learv <learv@foxmail.com>
+ // | ppogg <aweiyunbina3@163.com>
+ // +-------------------------------------------------------------------
+ // | Knowledge change destiny, share knowledge change you and me.
+ // +-------------------------------------------------------------------
+ // | To be successful
+ // | must first learn To face the loneliness,who can understand.
+ // +-----------------------------------------------------------------*/
 use Skschool\Config;
 use Skschool\Routing;
 
@@ -23,6 +40,8 @@ class Application
 	 */
 	static public function init() {
 		require APP_ROOT . 'vendor/autoload.php';
+		$model_path = APP_ROOT.'config/model.php';
+		if(file_exists($model_path)) require $model_path;
 		require SKPHP_CORE . 'Fun.php';
 		// 加载应用配置和方法
 		self::mergeConfig();
@@ -37,32 +56,27 @@ class Application
 	 * @return 	void
 	 */
 	static public function mergeConfig() {
-		$config_path = APP_ROOT.'config/config.php';
-		if(file_exists($config_path))
+		$config_path1 = APP_ROOT.'config/config.php';
+		if(!file_exists($config_path1)) trigger_error('Not Find '.$config_path1);
+		$config_path2 = APP_ROOT.'config/databases.php';
+		if(!file_exists($config_path2)) trigger_error('Not Find '.$config_path2);
+		$config = array_merge(require $config_path1, require $config_path2);
+		if(!empty($config['load_ext_config']))
 		{
-			// $config = array_merge(require SK_PATH.'/conf/config.php', require $config_path);
-			$config = require $config_path;
-			if(!empty($config['load_ext_config']))
+			$arr_config = explode(',', $config['load_ext_config']);
+			foreach ($arr_config as $v)
 			{
-				$arr_config = explode(',', $config['load_ext_config']);
-				foreach ($arr_config as $v)
+				$tmp = APP_ROOT.'config/'.$v.'.php';
+				if(file_exists($tmp))
 				{
-					$tmp = APP_ROOT.'config/'.$v.'.php';
-					if(file_exists($tmp))
-					{
-						$config = array_merge($config, require $tmp);
-					}else{
-						trigger_error('Not Find '.$tmp.', Beacuse load_ext_config setting.');
-					}
+					$config = array_merge($config, require $tmp);
+				}else{
+					trigger_error('Not Find '.$tmp.', Beacuse load_ext_config setting.');
 				}
 			}
-		}else{
-			// throw new Exception('DOH!!');
-			trigger_error('Not Find '.$config_path);
-			//$config = array_merge(require SK_PATH.'/conf/config.php', array());
 		}
 		Config::$_config = $config;
-		
+				
 		$routes_path = APP_ROOT.'config/routes.php';
 		if(!file_exists($routes_path)) trigger_error('Not Find '.$routes_path);
 		require $routes_path;
@@ -76,16 +90,10 @@ class Application
 	 */
 	static public function run()
 	{
-		/**
-		 *          set_error_handler - 自定义错误处理	trigger_error("A custom error has been triggered");
-		 *      set_exception_handler - 自定义异常处理 	throw new Exception('DOH!!');
-		 * register_shutdown_function - 在执行完所有ＰＨＰ语句后再调用函数，不要理解成客户端关闭流浏览器页面时调用函数。
-		 * 可以这样理解调用条件：
-		 * 1、当页面被用户强制停止时
-		 * 2、当程序代码运行超时时
-		 * 3、当ＰＨＰ代码执行完成时
-		 */
-		
+		// 设定错误和异常处理
+		register_shutdown_function('Application::fatalError');
+		set_error_handler('Application::appError');
+		set_exception_handler('Application::appException');		
 
 		// init
 		self::init();
@@ -115,7 +123,7 @@ class Application
 				$e              = $error;
 			}
 		} else {
-			$error_page = C('error_page');	//否则定向到错误页面
+			$error_page = Config::$_config['error_page'];	//否则定向到错误页面
 			if (!empty($error_page)) {
 				header("Location: " . $error_page);exit;
 			} else {
@@ -128,6 +136,7 @@ class Application
 		include $exceptionFile;
 		exit;
 	}
+	
 		
 	/**
 	 * 致命错误捕获
@@ -153,6 +162,7 @@ class Application
 		}
 	}	
 	
+	
 	/**
 	 * 自定义错误处理
 	 * @access public
@@ -165,7 +175,7 @@ class Application
 	static public function appError($errno='', $errmsg='', $errfile='', $errline='') {
 		if (!APP_DEBUG)
 		{
-			$error_page = C('error_page');
+			$error_page = Config::$_config['error_page'];
 			if (!empty($error_page)) {
 				header("Location: " . $error_page);exit;
 			} else {
@@ -181,6 +191,7 @@ class Application
 		exit;
 	}
 		
+	
 	/**
 	 * 自定义异常处理
 	 * @access 	public

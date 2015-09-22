@@ -22,7 +22,7 @@
 			<div style="margin: 15px 0;"><?php echo nl2br($e['trace']);?></div><br>
 			<?php }?>
 			<div class="copyright">
-			<p><a title="官方网站" target="_blank" href="http://www.sk-school.com">SKPHP</a><sup>1.0.0</sup> { Share knowledge change you and me } -- [ Made In China  ]</p>
+			<p><a title="官方网站" target="_blank" href="http://www.sk-school.com">SKPHP</a><sup>2.0</sup> { Share knowledge change you and me } -- [ 为web梦想家创造的PHP框架。 ]</p>
 			</div>
 		</div>
 	</fieldset>
