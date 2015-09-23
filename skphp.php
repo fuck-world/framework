@@ -29,6 +29,12 @@ define('DATA_CACHE_PATH',        APP_ROOT.'tmp/data/'); 	// 应用样式缓存�
 define('LOG_PATH',       		 APP_ROOT.'tmp/logs/'); 	// 应用日志目录
 define('SKPHP_CORE', 		dirname(__FILE__)."/src/");		// SKPHP核心目录
 
+// 定义当前请求的系统常量
+define('NOW_TIME',      $_SERVER['REQUEST_TIME']);
+define('REQUEST_METHOD',$_SERVER['REQUEST_METHOD']);
+define('IS_GET',        REQUEST_METHOD =='GET' ? true : false);
+define('IS_POST',       REQUEST_METHOD =='POST' ? true : false);
+
 
 class Application 
 {
