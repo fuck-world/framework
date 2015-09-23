@@ -77,7 +77,7 @@ class View {
 		if (file_exists($view_file)) 
        	{
        		$filetime = date("YmdHis", filemtime($view_file));
-       		$view_file_cache = VIEW_CACHE_PATH . md5(MODULE_NAME.CONTROLLER_NAME.ACTION_NAME.$filetime) . '.php';
+       		$view_file_cache = VIEW_CACHE_PATH . md5(MODULE_NAME.CONTROLLER_NAME.ACTION_NAME.$view_file.$filetime) . '.php';
 			if (!file_exists($view_file_cache)) $this->writeTplCache($view_file_cache,file_get_contents($view_file));
 			extract($this->data);
 			ob_start();
