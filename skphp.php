@@ -34,6 +34,14 @@ class Application
 {
 	
 	/**
+	 *  实例化对象（静态变量保存全局实例）
+	 * @access	public
+	 * @return 	void
+	 */
+	static public $_instance = [];
+	
+	
+	/**
 	 * 初始化
 	 * @access	public
 	 * @return 	void
@@ -42,7 +50,9 @@ class Application
 		require APP_ROOT . 'vendor/autoload.php';
 		$model_path = APP_ROOT.'config/model.php';
 		if(file_exists($model_path)) require $model_path;
+		require SKPHP_CORE . 'Mysql.php';
 		require SKPHP_CORE . 'Fun.php';
+		self::$_instance['mysql'] =  Mysql::getInstance();
 		// 加载应用配置和方法
 		self::mergeConfig();
 		if(empty(Config::$_config['charset'])) trigger_error('IS Not Setting charset @ config.php');

@@ -104,8 +104,7 @@ function WC($name='', $value='') {
  */
 function DB($connection='')
 {
-	require SKPHP_CORE . 'Mysql.php';
-	$mysql =  Mysql::getInstance();
+	$mysql =  Application::$_instance['mysql'];
 	
 	// 自定义
 	if(!empty($connection))
