@@ -73,7 +73,7 @@ class View {
      * @return 	string
      */
 	public function fetch($templateFile) {
-		$view_file = VIEW_PATH . $templateFile . '.php';
+		$view_file = VIEW_PATH . strtolower($templateFile) . '.php';
 		if (file_exists($view_file)) 
        	{
        		$filetime = date("YmdHis", filemtime($view_file));
